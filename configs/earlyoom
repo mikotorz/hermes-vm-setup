@@ -1,0 +1,4 @@
+# earlyoom config — managed by vm-setup
+# Kill when available memory < 8% or free swap < 10%
+# Prefer node (biggest offender), avoid hermes/python/sshd/systemd/earlyoom
+EARLYOOM_ARGS="-m 8 -s 10 -r 60 --prefer '(^|/)(node)$' --avoid '(^|/)(hermes|python[0-9]|sshd|systemd|earlyoom)$'"

@@ -13,6 +13,6 @@ fi
 
 # Configure ZRAM
 echo lzo-rle > /sys/block/zram0/comp_algorithm
-echo 256M > /sys/block/zram0/disksize
+echo 512M > /sys/block/zram0/disksize
 mkswap /dev/zram0
 swapon -p 100 /dev/zram0
