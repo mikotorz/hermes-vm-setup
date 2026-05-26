@@ -9,7 +9,7 @@ running **Hermes Agent** (2 vCPU, 1GB RAM, Ubuntu 26.04).
 
 | Optimization | What | Why |
 |---|---|---|
-| **ZRAM** | 512MB compressed in-memory swap (zstd) | 2.6x compression, RAM-speed, no disk I/O |
+| **ZRAM** | 256MB compressed in-memory swap (lzo-rle) | Custom systemd service — zstd was too heavy on this 836MB kernel |
 | **swappiness=10** | Keep pages in RAM unless truly necessary | Default 60 was swapping 270MB on idle |
 | **No disk swap file** | Removed /swapfile | Freed 2GB disk space |
 | **Journald capped** | 50MB max | Prevents log daemon from eating RAM |
@@ -28,11 +28,15 @@ running **Hermes Agent** (2 vCPU, 1GB RAM, Ubuntu 26.04).
 vm-setup/
 ├── README.md              ← this file
 ├── bootstrap.sh           ← run to re-apply everything fresh
-└── configs/
-    ├── zram-generator.conf     ZRAM config
-    ├── 99-swappiness.conf      sysctl swappiness
-    ├── journald-override.conf  journald caps
-    └── ctrld.toml              DNS proxy config (reference)
+├── configs/
+│   ├── 99-swappiness.conf      sysctl swappiness
+│   ├── journald-override.conf  journald caps
+│   └── ctrld.toml              DNS proxy config (reference)
+└── scripts/
+    └── zram/
+        ├── zram-swap-setup.sh      configure 256M lzo-rle swap
+        ├── zram-swap-teardown.sh   clean swapoff on stop
+        └── zram-swap.service       systemd unit (survives reboot)
 ```
 
 ## Usage
@@ -50,7 +54,7 @@ hermes --continue
 
 ## Reverting
 
-- **ZRAM:** `swapoff /dev/zram0 && apt-get remove systemd-zram-generator && rm /etc/systemd/zram-generator.conf`
+- **ZRAM:** `systemctl disable --now zram-swap.service && modprobe -r zram`
 - **Swap file:** `dd if=/dev/zero of=/swapfile bs=1M count=2048 && mkswap /swapfile && swapon /swapfile && echo '/swapfile none swap sw 0 0' >> /etc/fstab`
 - **Swappiness:** `rm /etc/sysctl.d/99-swappiness.conf && sysctl vm.swappiness=60`
 - **Services:** Unmask/re-enable with `systemctl unmask rsyslog packagekit && systemctl enable <service> --now`
