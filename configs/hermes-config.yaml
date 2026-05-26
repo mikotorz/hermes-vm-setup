@@ -1,9 +1,9 @@
 model:
-  default: deepseek/deepseek-v4-flash:free
-  provider: nous
-  base_url: https://inference-api.nousresearch.com/v1
+  default: deepseek-v4-flash
+  provider: deepseek
+  base_url: https://api.deepseek.com
 providers: {}
-fallback_providers: '["openrouter/deepseek/deepseek-v4-flash:free"]'
+fallback_providers: '["nous"]'
 credential_pool_strategies: {}
 toolsets:
 - hermes-cli
@@ -159,7 +159,7 @@ bedrock:
 auxiliary:
   vision:
     provider: google
-    model: gemini-2.5-flash-preview-04-17
+    model: gemini-2.5-flash
     base_url: ''
     api_key: ''
     timeout: 120
@@ -167,14 +167,14 @@ auxiliary:
     download_timeout: 30
   web_extract:
     provider: google
-    model: gemini-2.5-flash-preview-04-17
+    model: gemini-2.5-flash
     base_url: ''
     api_key: ''
     timeout: 360
     extra_body: {}
   compression:
     provider: google
-    model: gemini-2.5-flash-preview-04-17
+    model: gemini-2.5-flash
     base_url: ''
     api_key: ''
     timeout: 120
@@ -188,7 +188,7 @@ auxiliary:
     extra_body: {}
   approval:
     provider: google
-    model: gemini-2.5-flash-preview-04-17
+    model: gemini-2.5-flash-lite
     base_url: ''
     api_key: ''
     timeout: 30
@@ -412,7 +412,7 @@ approvals:
   timeout: 60
   cron_mode: deny
   mcp_reload_confirm: true
-  destructive_slash_confirm: true
+  destructive_slash_confirm: false
 command_allowlist: []
 quick_commands: {}
 hooks: {}
