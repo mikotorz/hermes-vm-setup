@@ -373,7 +373,7 @@ curator:
     enabled: true
     keep: 5
 honcho: {}
-timezone: ''
+timezone: Asia/Tokyo
 slack:
   require_mention: true
   free_response_channels: ''
