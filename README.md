@@ -1,0 +1,62 @@
+# Hermes VM Setup
+
+Configuration files and bootstrap script for a lightweight Azure VM
+running **Hermes Agent** (2 vCPU, 1GB RAM, Ubuntu 26.04).
+
+## What this does
+
+| Optimization | What | Why |
+|---|---|---|
+| **ZRAM** | 512MB compressed in-memory swap (zstd) | 2.6x compression, RAM-speed, no disk I/O |
+| **swappiness=10** | Keep pages in RAM unless truly necessary | Default 60 was swapping 270MB on idle |
+| **No disk swap file** | Removed /swapfile | Freed 2GB disk space |
+| **Journald capped** | 50MB max | Prevents log daemon from eating RAM |
+| **ModemManager off** | Mobile broadband daemon | Zero purpose on Azure |
+| **udisks2 off** | Desktop disk manager | Zero purpose on Azure |
+| **multipathd off** | SAN multipath routing | Not needed on basic VM |
+| **snapd removed** | Snap package daemon | Zero snaps installed, 16-36MB wasted |
+| **packagekitd masked** | Background pkg manager | 18MB running for no reason |
+| **earlyoom installed** | Proactive OOM killer | Prevents freeze on 1GB system |
+| **rsyslog masked** | Syslog daemon | systemd-journald already does this |
+| **ctrld kept** | ControlD DNS proxy (DoH3) | User-configured, 22MB |
+
+## Contents
+
+```
+vm-setup/
+├── README.md              ← this file
+├── bootstrap.sh           ← run to re-apply everything fresh
+└── configs/
+    ├── zram-generator.conf     ZRAM config
+    ├── 99-swappiness.conf      sysctl swappiness
+    ├── journald-override.conf  journald caps
+    └── ctrld.toml              DNS proxy config (reference)
+```
+
+## Usage
+
+### Fresh install
+```bash
+sudo ./bootstrap.sh
+sudo reboot
+```
+
+### After reboot
+```bash
+hermes --continue
+```
+
+## Reverting
+
+- **ZRAM:** `swapoff /dev/zram0 && apt-get remove systemd-zram-generator && rm /etc/systemd/zram-generator.conf`
+- **Swap file:** `dd if=/dev/zero of=/swapfile bs=1M count=2048 && mkswap /swapfile && swapon /swapfile && echo '/swapfile none swap sw 0 0' >> /etc/fstab`
+- **Swappiness:** `rm /etc/sysctl.d/99-swappiness.conf && sysctl vm.swappiness=60`
+- **Services:** Unmask/re-enable with `systemctl unmask rsyslog packagekit && systemctl enable <service> --now`
+- **snapd:** `apt-get install -y snapd`
+- **earlyoom:** `apt-get purge -y earlyoom`
+
+## Hermes notes
+
+- **Gateway:** runs as `hermes-gateway.service` (systemd user service, linger enabled)
+- **Resume:** `hermes --continue` after reboot
+- **Skill:** `skill_view(name='azure-vm-low-ram-trim')` in-session for details

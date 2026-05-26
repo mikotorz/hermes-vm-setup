@@ -1,0 +1,24 @@
+# ControlD DNS proxy config (auto-generated via 'cd' flag)
+# Installed at: /etc/controld/ctrld.toml
+# Service: ctrld.service
+
+[listener]
+  [listener.0]
+    ip = '127.0.0.1'
+    port = 53
+
+    [listener.0.policy]
+      name = 'My Policy'
+      rules = []
+
+[network]
+  [network.0]
+    name = 'Network 0'
+    cidrs = ['0.0.0.0/0']
+
+[upstream]
+  [upstream.0]
+    type = 'doh3'
+    endpoint = 'https://dns.controld.com/<YOUR_SUBSCRIBE_KEY>'
+    bootstrap_ip = '76.76.2.22'
+    timeout = 5000
