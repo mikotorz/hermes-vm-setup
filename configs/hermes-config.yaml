@@ -3,7 +3,7 @@ model:
   provider: nous
   base_url: https://inference-api.nousresearch.com/v1
 providers: {}
-fallback_providers: []
+fallback_providers: '["openrouter/deepseek/deepseek-v4-flash:free"]'
 credential_pool_strategies: {}
 toolsets:
 - hermes-cli
@@ -158,23 +158,23 @@ bedrock:
     trace: disabled
 auxiliary:
   vision:
-    provider: auto
-    model: ''
+    provider: google
+    model: gemini-2.0-flash-001
     base_url: ''
     api_key: ''
     timeout: 120
     extra_body: {}
     download_timeout: 30
   web_extract:
-    provider: auto
-    model: ''
+    provider: google
+    model: gemini-2.0-flash-001
     base_url: ''
     api_key: ''
     timeout: 360
     extra_body: {}
   compression:
-    provider: auto
-    model: ''
+    provider: google
+    model: gemini-2.0-flash-001
     base_url: ''
     api_key: ''
     timeout: 120
@@ -187,8 +187,8 @@ auxiliary:
     timeout: 30
     extra_body: {}
   approval:
-    provider: auto
-    model: ''
+    provider: google
+    model: gemini-2.0-flash-lite-001
     base_url: ''
     api_key: ''
     timeout: 30
