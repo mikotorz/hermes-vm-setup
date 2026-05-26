@@ -1,0 +1,15 @@
+[Unit]
+Description=ZRAM swap setup
+After=local-fs.target
+Before=swap.target
+DefaultDependencies=no
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStartPre=/sbin/modprobe zram num_devices=1
+ExecStart=/usr/local/bin/zram-swap-setup.sh
+ExecStop=/usr/local/bin/zram-swap-teardown.sh
+
+[Install]
+WantedBy=multi-user.target
