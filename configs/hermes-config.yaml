@@ -159,7 +159,7 @@ bedrock:
 auxiliary:
   vision:
     provider: google
-    model: gemini-2.0-flash-001
+    model: gemini-2.5-flash-preview-04-17
     base_url: ''
     api_key: ''
     timeout: 120
@@ -167,14 +167,14 @@ auxiliary:
     download_timeout: 30
   web_extract:
     provider: google
-    model: gemini-2.0-flash-001
+    model: gemini-2.5-flash-preview-04-17
     base_url: ''
     api_key: ''
     timeout: 360
     extra_body: {}
   compression:
     provider: google
-    model: gemini-2.0-flash-001
+    model: gemini-2.5-flash-preview-04-17
     base_url: ''
     api_key: ''
     timeout: 120
@@ -188,7 +188,7 @@ auxiliary:
     extra_body: {}
   approval:
     provider: google
-    model: gemini-2.0-flash-lite-001
+    model: gemini-2.5-flash-preview-04-17
     base_url: ''
     api_key: ''
     timeout: 30
