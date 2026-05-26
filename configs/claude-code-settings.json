@@ -1,0 +1,40 @@
+{
+  "theme": "auto",
+  "permissions": {
+    "allow": [
+      "Read",
+      "Write",
+      "Edit",
+      "Bash(cd *)",
+      "Bash(ls *)",
+      "Bash(git *)",
+      "Bash(cat *)",
+      "Bash(grep *)",
+      "Bash(node *)",
+      "Bash(npm *)",
+      "Bash(python *)",
+      "Bash(pip *)",
+      "Bash(poetry *)",
+      "Bash(ruff *)",
+      "Bash(mypy *)",
+      "Bash(pytest *)"
+    ],
+    "ask": [
+      "Bash(git push *)",
+      "Bash(git merge *)",
+      "Bash(git rebase *)",
+      "Bash(npm publish *)",
+      "Bash(pip install --global *)",
+      "Bash(sudo *)",
+      "Bash(rm -rf *)",
+      "WebSearch",
+      "WebFetch"
+    ],
+    "deny": [
+      "Read(.env*)",
+      "Read(*secret*)",
+      "Read(*credential*)",
+      "Bash(rm -rf /)"
+    ]
+  }
+}
